@@ -1,15 +1,29 @@
-const { Schema, Model, Datatypes } = require('mongoose');
+const { Schema, Model, } = require('mongoose');
 
-const mongoose = require('../config/connection');
+const ThoughtSchemata = new Schema({
+    thoughtText: {
+        type: 'string',
+        required: true,
+        min: [1, 'Must have at least one character'],
+        max: [280, 'Must be less than 280 characters'],
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now,
+        toJSON: {
+            getters: true
+          }
+    },
+    userName: {
+        type: 'string',
+        required: true,
+    },
+    reactions: [{
+        type: Schema.Types.ObjectId,
+        ref: ReactionSchema
 
-class Thoughts extends Model {}
+    }]
+});
+const Thought = model('Thought', ThoughtSchema)
 
-Thoughts.init(
-    {
-        thoughtText: {
-            type: DataTypes.STRING,
-
-
-        }
-    }
-)
+module.exports = Thought;
