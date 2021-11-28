@@ -23,6 +23,11 @@ const ReactionSchema = new Schema({
     },
 })
 
+ReactionSchema.virtual('reactionCount').get(function() {
+    return this.reactions.length;
+});
+
+
 const Reaction = model('Reaction', ReactionSchema);
 
 module.exports = Reaction;
