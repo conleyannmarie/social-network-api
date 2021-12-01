@@ -11,9 +11,6 @@ const ThoughtSchema = new Schema({
     createdAt: {
         type: Date,
         default: Date.now,
-        toJSON: {
-            getters: true
-          }
     },
     userName: {
         type: 'string',
