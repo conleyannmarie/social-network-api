@@ -1,6 +1,7 @@
-const { Thought, User } = require("../models");
+const { Thought, User } = require("../../models");
+const { router } = require('express').Router();
 
-const thoughtController = {
+const thoughtRoute = {
     // create new
   createThought({ params, body }, res) {
     Thought.create(body).then(({ _id }) => {
@@ -115,4 +116,4 @@ const thoughtController = {
   }
 };
 
-module.exports = thoughtController;
+module.exports = thoughtRoute;
