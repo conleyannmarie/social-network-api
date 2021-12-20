@@ -1,48 +1,51 @@
 const { Schema, model } = require('mongoose');
+const moment = require('moment');
+
 
 const UserSchema = new Schema({
-    userName: {
-        type: String,
-        unique: true,
-        required: true,
-        trimmed: true
-    },
-    email: {
-        type: String,
-        required: true,
-        unique: true,
-        validate: {
-            validator: function(v) {
-                return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v);
-            },
-            message: "Please enter a valid email"
-        },
-        required: [true, "Email required"]
-    },
+  username: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true,
+    match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please enter a valid email address']
+  },
+  thoughts: [
+      {
+          type: Schema.Types.ObjectId,
+          ref: 'Thought'
+      }
+    ],
+  friends: [
+      {
+          type: Schema.Types.ObjectId,
+          ref: 'User'
+      }
+  ]
+  },
+  { 
+  toJSON: {
+    virtuals: true,
+    getters: true
+  },
+  id: false
+}
+);
 
-    thoughts: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Thought'
-
-    }],
-    friends: [{
-        type: Schema.Types.ObjectId,
-        ref: 'User'
-    }]
-},
-{
-    toJSON: {
-        virtuals: true,
-        getters: true
-    },
-    id: false
-});
-
-//get friend count
-UserSchema.virtual('friendCount').get(function() {
-    return this.friends.length;
-});
-
+// create the User Model using the Schema
 const User = model('User', UserSchema);
 
+// get total count of comments and replies on retrieval
+UserSchema.virtual('friendCount').get(function() {
+  return this.friends.length;
+});
+
+
+  // export the User model
 module.exports = User;
